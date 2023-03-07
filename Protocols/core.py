@@ -13,6 +13,12 @@ class QKDBits():
     def __eq__(self, other):
         return (self.bit_sent, self.bit_recv, self.certain) == (self.bit_sent, self.bit_recv, self.certain)
 
+    def __str__(self):
+        return f"Bits(S:{'01'[self.bit_sent]}, R:{'01'[self.bit_recv]}, C:{self.certain})"
+
+    def __repr__(self):
+        return self.__str__()
+
 class QKDResults():
     _total_count: int
     _bit_counts: dict[QKDBits, int]
@@ -30,6 +36,9 @@ class QKDResults():
         print("[dgb] certainty_count", self._certainty_count)
         print("[dgb] total_count", self._total_count)
         return self._certainty_count / self._total_count
+
+    def rke(self):
+        return self.raw_key_efficiency()
 
 class QKDScheme(abc.ABC):
     def _get_circuit(self):
@@ -49,5 +58,4 @@ class QKDScheme(abc.ABC):
             if bits not in bit_counts:
                 bit_counts[bits] = 0
             bit_counts[bits] += bits_count
-        print("[dbg] bit_counts", bit_counts)
         return QKDResults(bit_counts)
