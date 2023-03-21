@@ -5,8 +5,7 @@ import core
 
 
 class BB84Scheme(core.QKDScheme):
-    def __init__(self):
-        eavesdropper = False
+    def __init__(self, eavesdropper: bool):
         simulator = QasmSimulator()
         
         qreg_q = QuantumRegister(1, 'q')
@@ -50,6 +49,7 @@ class BB84Scheme(core.QKDScheme):
         circuit.measure(qreg_q[0], creg_r_bit[0])
 
         self._circuit = transpile(circuit, simulator)
+        self._eavesdropper = eavesdropper
 
     def _get_circuit(self):
         return self._circuit
@@ -59,10 +59,15 @@ class BB84Scheme(core.QKDScheme):
         bit_recv = bits_str[3] == '1'
         basis_sent = bits_str[0]
         basis_recv = bits_str[1]
+        if self._eavesdropper:
+            basis_eavesdropped = bits_str[4]
+            bit_eavesdropped = bits_str[5]
         certain = basis_sent == basis_recv
         bits = core.QKDBits()
         bits.bit_sent = bit_sent
         bits.bit_recv = bit_recv
         bits.certain = certain
+        if self._eavesdropper:
+            bits.bit_eavesdropped = bit_eavesdropped
         return bits
 
