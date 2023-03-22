@@ -60,8 +60,8 @@ class BB84Scheme(core.QKDScheme):
         basis_sent = bits_str[0]
         basis_recv = bits_str[1]
         if self._eavesdropper:
-            basis_eavesdropped = bits_str[4]
-            bit_eavesdropped = bits_str[5]
+            basis_eavesdropped = bits_str[4] == '1'
+            bit_eavesdropped = bits_str[5] == '1'
         certain = basis_sent == basis_recv
         bits = core.QKDBits()
         bits.bit_sent = bit_sent
