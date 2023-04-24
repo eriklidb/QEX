@@ -71,5 +71,5 @@ class BB84Scheme(core.QKDScheme):
             bits.bit_eavesdropped = bit_eavesdropped
         return bits
 
-    def _get_title(self):
+    def __str__(self):
         return "BB84"
