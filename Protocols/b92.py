@@ -65,3 +65,5 @@ class B92Scheme(core.QKDScheme):
             bits.bit_eavesdropped = bit_eavesdropped
         return bits
 
+    def _get_title(self):
+        return "B92"

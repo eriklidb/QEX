@@ -1,4 +1,5 @@
 from qiskit.providers.aer import QasmSimulator
+import numpy as np
 
 import abc
 
@@ -31,15 +32,19 @@ class QKDBits():
     def _calc_error(self):
         self.error = self.bit_sent != self.bit_recv
 
+
 class QKDResults():
     _total_count: int
     _bit_counts: dict[QKDBits, int]
     _certainty_count: int | None
     _bit_error_count: int | None
+    _title: str
+    _rke: float
 
-    def __init__(self, bit_counts: dict[QKDBits, int]):
+    def __init__(self, bit_counts: dict[QKDBits, int], title: str):
         self._bit_counts = bit_counts
-        self._total_count = sum([count for (bits, count) in self._bit_counts.items()])
+        self._total_count = sum([count for count in self._bit_counts.values()])
+        self._title = title
         self._rke = None
         self._certainty_count = None
         self._bit_error_count = None
@@ -51,7 +56,13 @@ class QKDResults():
         return self._certainty_count / self._total_count
 
     def rke(self):
-        return self.raw_key_efficiency()
+        if self._rke == None:
+            self._rke = self.raw_key_efficiency()
+        return self._rke
+
+    def __str__(self):
+        return self._title
+    
 
     def quantum_bit_error_rate(self):
         self._calc_certainty_count()
@@ -76,6 +87,8 @@ class QKDScheme(abc.ABC):
         pass
     def _interpret_bits(self, bits_str: str) -> QKDBits:
         pass
+    def _get_title(self):
+        pass
     def run(self, shots: int) -> QKDResults:
         simulator = QasmSimulator()
         bit_counts = dict()
@@ -90,4 +103,5 @@ class QKDScheme(abc.ABC):
             if bits not in bit_counts:
                 bit_counts[bits] = 0
             bit_counts[bits] += bits_count
-        return QKDResults(bit_counts)
+        return QKDResults(bit_counts, self._get_title())
+        

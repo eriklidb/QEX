@@ -7,8 +7,8 @@ import core
 class BB84Scheme(core.QKDScheme):
     def __init__(self, eavesdropper: bool):
         simulator = QasmSimulator()
-        
         qreg_q = QuantumRegister(1, 'q')
+
         if eavesdropper:
             creg_e_bit = ClassicalRegister(1, 'e_bit')
             creg_e_bas = ClassicalRegister(1, 'e_bas')
@@ -71,3 +71,5 @@ class BB84Scheme(core.QKDScheme):
             bits.bit_eavesdropped = bit_eavesdropped
         return bits
 
+    def _get_title(self):
+        return "BB84"

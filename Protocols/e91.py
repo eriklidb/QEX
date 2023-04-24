@@ -7,7 +7,6 @@ import core
 class E91Scheme(core.QKDScheme):
     def __init__(self, eavesdropper: bool):
         simulator = QasmSimulator()
-        
         qreg_q = QuantumRegister(2, 'q')
         creg_r_bit = ClassicalRegister(1, 'r_bit')
         creg_s_bit = ClassicalRegister(1, 's_bit')
@@ -69,3 +68,5 @@ class E91Scheme(core.QKDScheme):
             bits.bit_eavesdropped = bit_eavesdropped
         return bits
 
+    def _get_title(self):
+        return "E91"
