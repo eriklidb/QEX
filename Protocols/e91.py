@@ -30,6 +30,7 @@ class E91Scheme(core.QKDScheme):
 
         # Entanglement
         circuit.reset(qreg_q[0])
+        circuit.reset(qreg_q[1])
         circuit.h(qreg_q[0])
         circuit.cx(qreg_q[0], qreg_q[1])
         circuit.barrier(qreg_q)
